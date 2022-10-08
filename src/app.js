@@ -6,6 +6,9 @@ const app = express();
 
 mongoose.connect(config.connectionString, {useNewUrlParser: true});
 
+const Product = require('./models/product');
+const Cart = require('./models/cart');
+
 const indexRoutes = require('./routes/index-route');
 const productsRoutes = require('./routes/cart-route');
 const cartsRoutes = require('./routes/cart-route');
@@ -14,8 +17,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false}));
 
 app.use('/', indexRoutes);
-app.use('/api/products', productsRoutes);
-app.use('/api/carts', cartsRoutes);
+app.use('/products', productsRoutes);
+app.use('/carts', cartsRoutes);
 
 
 module.exports = app;

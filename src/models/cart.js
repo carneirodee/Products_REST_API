@@ -3,11 +3,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Product = require('./models/products');
-
 const schema = new Schema({
     products:[{
-        type: Product,
+        type: String,
         required: true,
         trim: true
     }]

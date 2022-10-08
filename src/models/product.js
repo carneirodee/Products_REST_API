@@ -26,4 +26,4 @@ const schema = new Schema({
     },
 });
 
-module.exports = mongoose.model('Patient', schema);
+module.exports = mongoose.model('Product', schema);
