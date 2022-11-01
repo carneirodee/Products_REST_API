@@ -1,12 +1,12 @@
 'use strict'
 
-const repository = require('../repositories/doctor-repository')
+const repository = require('../repositories/product-repository')
 const md5 = require('md5')
 
 exports.get = async (req, res, next) => {
   try {
     var data = await repository.get()
-    console.log('doctor - get - all doctors')
+    console.log('product - get - all products')
     res.status(200).send(data)
   } catch (erro) {
     res.status(500).send({
@@ -19,7 +19,7 @@ exports.getById = async (req, res, next) => {
   try {
     let id = req.params.id
     var data = await repository.getById(id)
-    console.log(`doctor - getById - id[${id}]`)
+    console.log(`product - getById - id[${id}]`)
     res.status(200).send(data)
   } catch (e) {
     res.status(500).send({
@@ -27,73 +27,29 @@ exports.getById = async (req, res, next) => {
     })
   }
 }
+
 exports.post = async (req, res, next) => {
+  console.log('product - create');
+  console.log('product:', req.body);
+
   try {
     await repository.create({
-      nome: req.body.nome,
-      senha: md5(req.body.senha + global.SALT_KEY),
-      crm: req.body.crm,
-      email: req.body.email,
-      telefone: req.body.telefone,
-      status: req.body.status,
-      cep: req.body.cep,
-      rua: req.body.rua,
-      complemento: req.body.complemento,
-      bairro: req.body.bairro,
-      cidade: req.body.cidade,
-      estado: req.body.estado,
-      operadoras: req.body.operadoras,
-      prestadores: req.body.prestadores
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      quant: req.body.quant
     })
 
-    let sendEmail = await emailService.send(
-      req.body.email,
-      'Bem-vindo ao Salvus Teste da 2ª Etapa',
-      global.env.EMAIL_TMPL.replace('{0}', req.body.nome)
-    )
     res.status(200).send({
-      message: 'Médico cadastrado com sucesso' + sendEmail
+      message: 'Success'
     });
-    console.log('doctor - create');
-    console.log('Doctor:', req.body);
-  } catch (erro) {
-    res.status(500).send({
-      message: 'Falha ao processar sua requisição' + erro
-    })
-  }
-}
 
-exports.authenticate = async (req, res, next) => {
-  try {
-    const doctor = await repository.authenticate({
-      email: req.body.email,
-      senha: md5(req.body.senha + global.SALT_KEY)
-    })
-    if (!doctor) {
-      console.log('doctor - auth - not_found');
-      res.status(404).send({
-        message: 'Usuário ou Senha inválidos'
-      });
-      return
-    }
-    console.log(
-        `doctor - auth - email[${req.body.email}] - senha[${req.body.senha}]`
-      );
-    const token = await authService.generateToken({
-      email: doctor.email,
-      nome: doctor.nome
-    })
-    res.status(201).send({
-      token: token,
-      data: {
-        email: doctor.email,
-        nome: doctor.nome
-      },
-      message: 'Autenticação feita com sucesso'
-    })
+    console.log('product - create');
+    console.log('product:', req.body);
   } catch (erro) {
+    console.log(erro)
     res.status(500).send({
-      message: 'Falha ao processar sua requisição'
+      message: 'Falha ao processar sua requisição ' + erro
     })
   }
 }
@@ -105,8 +61,8 @@ exports.put = async (req, res, next) => {
     res.status(201).send({
       message: 'Dados do médico foram atualizados com sucesso'
     });
-    console.log(`doctor - update - id[${id}]`);
-    console.log('Doctor:' + req.body);
+    console.log(`product - update - id[${id}]`);
+    console.log('product:' + req.body);
   } catch (erro) {
     res.status(500).send({
       message: 'Falha ao processar sua requisição'
@@ -121,7 +77,7 @@ exports.delete = async (req, res, next) => {
     res.status(200).send({
       message: 'Médico removido com successo com sucesso'
     });
-    console.log(`doctor - delete - id[${id}]`);
+    console.log(`product - delete - id[${id}]`);
   } catch (erro) {
     res.status(500).send({
       message: 'Falha ao processar sua requisição'

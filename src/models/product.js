@@ -17,7 +17,6 @@ const schema = new Schema({
     price:{
         type: Number,
         required: true,
-        trim: true
     },
     quant:{
         type: Number,
